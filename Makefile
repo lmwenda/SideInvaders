@@ -2,7 +2,7 @@
 SRC_DIR = src
 BUILD_DIR = build
 OUTPUT_DIR = output
-INCLUDE_DIR = include
+INCLUDE_DIR = headers
 
 # Compiler and flags
 CXX = g++
