@@ -6,6 +6,8 @@
 
 Game::Game() : window(sf::VideoMode(800,600), "Side Invaders"), player(), enemy_manager(){	
 	window.setFramerateLimit(60);
+    this->player_points = 0;
+    this->point_time = 5.00;
     this->current_State = GameState::MAINMENU; 
 }
 
@@ -62,6 +64,7 @@ void Game::ProcessEvents(){
 
 		if(event.type == sf::Event::Closed)
 			window.close();
+            std::cout << this->player_points << std::endl;
 
         if(this->current_State == GameState::MAINMENU){
             if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space){
@@ -77,7 +80,15 @@ void Game::Update(){
     player.Controls();
     enemy_manager.Update(deltaTime);
 
+    if (clock.getElapsedTime().asSeconds() >= point_time)
+    {
+        this->player_points = this->player_points + 10;
+        this->point_time = this->point_time + 2.50;
+        std::cout << "Player Points: " << this->player_points << std::endl;
+    }
+
     std::cout << clock.getElapsedTime().asSeconds() << std::endl;
+
 }
 
 void Game::Render(){

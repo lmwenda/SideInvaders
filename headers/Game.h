@@ -33,6 +33,8 @@ class Game{
         EnemyManager enemy_manager;
         GameState current_State;
 
+        int player_points;
+        float point_time;
         sf::Clock clock;
         sf::Time deltaTime;
         const unsigned int seconds = static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
