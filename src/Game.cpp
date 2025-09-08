@@ -2,14 +2,18 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "EnemyManager.h"
 
-Game::Game() : window(sf::VideoMode(800,600), "Side Invaders"), player(), enemy(){	
+Game::Game() : window(sf::VideoMode(800,600), "Side Invaders"), player(), enemy_manager(){	
 	window.setFramerateLimit(60);
 }
 
 void Game::Run(){
 	// Everything in this loop runs every frame
+    
+
+    sf::Clock clock;
+    sf::Time deltaTime = clock.restart();
 	while (window.isOpen()){
 
 		Game::ProcessEvents();
@@ -32,15 +36,9 @@ void Game::ProcessEvents(){
 void Game::Update(){
     // Update Game Logic
     player.Controls();
-
-
-    /*
-    std::vector<Enemy> enemies;
-    
-    if (enemies.size() < 5){
-        Enemy enemy;
-        enemies.push_back(enemy);
-    } */
+    enemy_manager.Update(deltaTime);
+   
+    std::cout << clock.getElapsedTime().asSeconds() << std::endl;
 
 
 
@@ -50,13 +48,7 @@ void Game::Render(){
     window.clear();
 
     player.Blitz(window);
+    enemy_manager.Blitz(window);
 
-    /* 
-    for(int i=0; i < enemies.size(); i++)
-    {
-        enemy.Blitz(window);
-    }
-
-    */
     window.display();
 }

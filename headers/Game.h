@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.h"
 #include "Enemy.h"
+#include "EnemyManager.h"
 
 class Game{
 	public:
@@ -11,12 +12,14 @@ class Game{
 
 	private:
 		sf::RenderWindow window;
-        std::vector<Enemy> enemies;
+ 
         Player player;
-        Enemy enemy;
+        EnemyManager enemy_manager;
 
         sf::Clock clock;
+        sf::Time deltaTime;
         const unsigned int seconds = static_cast<unsigned int>(clock.getElapsedTime().asSeconds());
+
 
 	private:
 		void ProcessEvents();
