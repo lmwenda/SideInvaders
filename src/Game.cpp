@@ -6,6 +6,16 @@
 
 Game::Game() : window(sf::VideoMode(800,600), "Side Invaders"), player(), enemy_manager(){	
 	window.setFramerateLimit(60);
+    if (!backgroundTexture.loadFromFile("assets/Background.png")) {
+        std::cerr << "Failed to load background image!" << std::endl;
+    }
+
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(
+         window.getSize().x / backgroundSprite.getLocalBounds().width,
+         window.getSize().y / backgroundSprite.getLocalBounds().height
+    );
+
     this->player_points = 0;
     this->point_time = 5.00;
     this->current_State = GameState::MAINMENU; 
@@ -114,6 +124,7 @@ void Game::Update(){
 
 void Game::Render(){
     window.clear();
+    window.draw(backgroundSprite);
 
     if (this->current_State == GameState::MAINMENU){
         Game::Menu(window);

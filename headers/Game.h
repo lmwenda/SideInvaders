@@ -28,6 +28,8 @@ class Game{
 
 	private:
 		sf::RenderWindow window;
+        sf::Texture backgroundTexture;
+        sf::Sprite backgroundSprite;
  
         Player player;
         EnemyManager enemy_manager;
