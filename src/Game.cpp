@@ -53,9 +53,19 @@ void Game::Dead(sf::RenderWindow &window)
     menuText.setString("YOU DIED..."); 
     menuText.setCharacterSize(32);
     menuText.setFillColor(sf::Color::Red);
-    menuText.setPosition(200.f, 300.f);
+    menuText.setPosition(250.f, 300.f);
     
+    sf::Text pointText; 
+    std::string pp_str = std::to_string(this->player_points);
+    std::string message = "Your Points: " + pp_str;
+    pointText.setFont(font);
+    pointText.setString(message); 
+    pointText.setCharacterSize(32);
+    pointText.setFillColor(sf::Color::White);
+    pointText.setPosition(250.f, 400.f);
+
     window.draw(menuText);
+    window.draw(pointText);
 }
 
 void Game::ProcessEvents(){
@@ -71,16 +81,27 @@ void Game::ProcessEvents(){
                     this->current_State = GameState::GAME;
             }
         }
+
+        if(this->current_State == GameState::DEAD){
+            enemy_manager.destroyAll();
+            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space){
+                this->current_State = GameState::MAINMENU;
+                this->player_points = 0;
+            }
+        }
 	}
 }
 
 
 void Game::Update(){
     // Update Game Logic
-    player.Controls();
-    enemy_manager.Update(deltaTime);
+    if(this->current_State == GameState::GAME){
+        player.Controls();
+        enemy_manager.Update(deltaTime);
+        enemy_manager.checkPlayerCollision(player, this->current_State);
+    }
 
-    if (clock.getElapsedTime().asSeconds() >= point_time)
+    if (clock.getElapsedTime().asSeconds() >= point_time && this->current_State == GameState::GAME)
     {
         this->player_points = this->player_points + 10;
         this->point_time = this->point_time + 2.50;
