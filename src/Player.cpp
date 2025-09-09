@@ -26,3 +26,9 @@ void Player::Controls()
 		this->player.move(0, -5);
 	}
 }
+
+sf::FloatRect Player::getPlayerBounds() const{
+    sf::FloatRect b_player = this->player.getGlobalBounds();
+
+    return b_player;
+}

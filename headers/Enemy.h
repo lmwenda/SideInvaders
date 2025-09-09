@@ -9,6 +9,7 @@ class Enemy{
         void Blitz(sf::RenderWindow &window);
         void Move();
         bool isOffScreen() const;
+        sf::FloatRect getEnemyBounds() const;
 
 	private:
 		sf::RectangleShape enemy;
