@@ -9,7 +9,7 @@ EnemyManager::EnemyManager() : m_spawnInterval(sf::seconds(2)){}
 
 void EnemyManager::Update(sf::Time deltaTime){
     if(m_spawnClock.getElapsedTime() >= m_spawnInterval){
-        if(Enemies.size() < 5){
+        if(Enemies.size() < 3){
             Enemy newenemy;
 
             Enemies.push_back(newenemy);

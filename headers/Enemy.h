@@ -12,7 +12,10 @@ class Enemy{
         sf::FloatRect getEnemyBounds() const;
 
 	private:
-		sf::RectangleShape enemy;
+		//sf::RectangleShape enemy;
+        static sf::Texture texture;
+        sf::Sprite enemy;
+ 
         int posX;
         int posY;
 		

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+sf::Texture Enemy::texture;
+
 int RandomIntegerX(){
     int number = std::rand()%(900-800+1)+800;
 
@@ -15,13 +17,17 @@ int RandomIntegerY()
     return number;
 }
 
-Enemy::Enemy() : enemy(){
+Enemy::Enemy(){
     int posX = RandomIntegerX();
     int posY = RandomIntegerY();
 
-	this->enemy.setSize(sf::Vector2f(50, 50));
-	this->enemy.setFillColor(sf::Color::Red);
+    if (!Enemy::texture.loadFromFile("assets/asteroid.png")) {
+        std::cerr << "Error: Failed to load enemy texture from 'enemy.png'\n";
+    }
+
+    this->enemy.setTexture(Enemy::texture);
 	this->enemy.setPosition(posX, posY);
+    this->enemy.setScale(0.f, 0.f);
 }
 
 void Enemy::Move(){
@@ -29,7 +35,7 @@ void Enemy::Move(){
 }
 
 bool Enemy::isOffScreen() const {
-    return this->enemy.getPosition().x + this->enemy.getSize().x < 0;
+    return this->enemy.getPosition().x + this->enemy.getGlobalBounds().width< 0;
 }
 
 void Enemy::Blitz(sf::RenderWindow &window){
@@ -37,9 +43,9 @@ void Enemy::Blitz(sf::RenderWindow &window){
 }
 
 sf::FloatRect Enemy::getEnemyBounds() const{
-    sf::FloatRect b_enemy = this->enemy.getGlobalBounds();
+    // sf::FloatRect b_enemy = this->enemy.getGlobalBounds();
 
-    return b_enemy;
+    return this->enemy.getGlobalBounds();;
 }
 
 
