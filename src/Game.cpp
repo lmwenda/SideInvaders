@@ -1,19 +1,24 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Rect.hpp>
+#include <SFML/Window/Event.hpp>
+
 #include "Game.h"
 #include "Player.h"
 #include "EnemyManager.h"
 
-Game::Game() : window(sf::VideoMode(800,600), "Side Invaders"), player(), enemy_manager(){	
+Game::Game() : window(sf::VideoMode(sf::Vector2u(800, 600)), "Side Invaders"), backgroundTexture("assets/Background.png"), backgroundSprite(backgroundTexture), enemy_manager(){	
 	window.setFramerateLimit(60);
-    if (!backgroundTexture.loadFromFile("assets/Background.png")) {
-        std::cerr << "Failed to load background image!" << std::endl;
-    }
+
+    sf::FloatRect spriteBounds = backgroundSprite.getLocalBounds();
 
     backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setPosition(sf::Vector2f(0, 0));
     backgroundSprite.setScale(
-         window.getSize().x / backgroundSprite.getLocalBounds().width,
-         window.getSize().y / backgroundSprite.getLocalBounds().height
+        sf::Vector2f(
+            static_cast<float>(window.getSize().x) / spriteBounds.size.x,
+            static_cast<float>(window.getSize().y) / spriteBounds.size.y
+        )
     );
 
     this->player_points = 0;
@@ -40,14 +45,11 @@ void Game::Run(){
 void Game::Menu(sf::RenderWindow &window)
 {
     sf::Font font;
-    font.loadFromFile("assets/arial.ttf"); // make sure this path is correct
+    font.openFromFile("assets/arial.ttf"); // make sure this path is correct
 
-    sf::Text menuText;
-    menuText.setFont(font);
-    menuText.setString("Press Space to Start");
-    menuText.setCharacterSize(32);
+    sf::Text menuText(font, "Press Space to Start", 32);
     menuText.setFillColor(sf::Color::White);
-    menuText.setPosition(200.f, 300.f); 
+    menuText.setPosition(sf::Vector2f(200.0f, 300.0f));
 
 
     window.draw(menuText);
@@ -56,47 +58,45 @@ void Game::Menu(sf::RenderWindow &window)
 void Game::Dead(sf::RenderWindow &window)
 {
     sf::Font font;
-    font.loadFromFile("assets/arial.ttf"); // make sure this path is correct
+    font.openFromFile("assets/arial.ttf"); // make sure this path is correct
 
-    sf::Text menuText;
-    menuText.setFont(font);
-    menuText.setString("YOU DIED..."); 
-    menuText.setCharacterSize(32);
+    sf::Text menuText(font, "YOU DIED...", 32);
     menuText.setFillColor(sf::Color::Red);
-    menuText.setPosition(250.f, 300.f);
+    menuText.setPosition(sf::Vector2f(250.0f, 300.0f));
     
-    sf::Text pointText; 
     std::string pp_str = std::to_string(this->player_points);
     std::string message = "Your Points: " + pp_str;
-    pointText.setFont(font);
-    pointText.setString(message); 
-    pointText.setCharacterSize(32);
+    sf::Text pointText(font, message, 32); 
     pointText.setFillColor(sf::Color::White);
-    pointText.setPosition(250.f, 400.f);
+    pointText.setPosition(sf::Vector2f(250.0f, 400.0f));
 
     window.draw(menuText);
     window.draw(pointText);
 }
 
 void Game::ProcessEvents(){
-	sf::Event event;
-	while(window.pollEvent(event)){
+	while(auto event = window.pollEvent()){
 
-		if(event.type == sf::Event::Closed)
+		if(event->is<sf::Event::Closed>())
 			window.close();
             std::cout << this->player_points << std::endl;
 
         if(this->current_State == GameState::MAINMENU){
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space){
+            if (auto keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+                if(keyPressed->code == sf::Keyboard::Key::Space){
                     this->current_State = GameState::GAME;
+                }
             }
         }
 
         if(this->current_State == GameState::DEAD){
             enemy_manager.destroyAll();
-            if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space){
-                this->current_State = GameState::MAINMENU;
-                this->player_points = 0;
+            if(auto keyPressed = event->getIf<sf::Event::KeyPressed>()){
+                if(keyPressed->code == sf::Keyboard::Key::Space)
+                {
+                    this->current_State = GameState::MAINMENU;
+                    this->player_points = 0;
+                }
             }
         }
 	}

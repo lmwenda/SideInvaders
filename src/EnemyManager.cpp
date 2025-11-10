@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Game.h"
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 
 
 EnemyManager::EnemyManager() : m_spawnInterval(sf::seconds(2)){}
@@ -39,7 +40,7 @@ void EnemyManager::destroyAll(){
 void EnemyManager::checkPlayerCollision(const Player &player, GameState &current_State){
     for(auto& enemy : Enemies)
     {
-        if(enemy.getEnemyBounds().intersects(player.getPlayerBounds()))
+        if(enemy.getEnemyBounds().contains(player.getPlayerBounds().position))
         {
             std::cout << "Player Collisioned with Enemy" << std::endl;
             current_State = GameState::DEAD;

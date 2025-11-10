@@ -4,7 +4,7 @@
 Player::Player() : player(){
 	player.setSize(sf::Vector2f(50, 50));
 	player.setFillColor(sf::Color::Blue);
-	player.setPosition(50, 270);
+	player.setPosition(sf::Vector2f(50.0, 270.0));
 }
 
 
@@ -16,14 +16,14 @@ void Player::Blitz(sf::RenderWindow &window)
 
 void Player::Controls()
 {
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
 	{
-		this->player.move(0, 5);
+		this->player.move(sf::Vector2f(0, 5));
 	}
 
-	if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
 	{
-		this->player.move(0, -5);
+		this->player.move(sf::Vector2f(0, -5));
 	}
 }
 

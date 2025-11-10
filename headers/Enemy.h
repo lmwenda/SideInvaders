@@ -14,7 +14,7 @@ class Enemy{
 	private:
 		//sf::RectangleShape enemy;
         static sf::Texture texture;
-        sf::Sprite enemy;
+        sf::Sprite asteroid;
  
         int posX;
         int posY;

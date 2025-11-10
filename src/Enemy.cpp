@@ -17,7 +17,7 @@ int RandomIntegerY()
     return number;
 }
 
-Enemy::Enemy(){
+Enemy::Enemy() :asteroid(Enemy::texture){
     int posX = RandomIntegerX();
     int posY = RandomIntegerY();
 
@@ -25,27 +25,27 @@ Enemy::Enemy(){
         std::cerr << "Error: Failed to load enemy texture from 'enemy.png'\n";
     }
 
-    this->enemy.setTexture(Enemy::texture);
-	this->enemy.setPosition(posX, posY);
-    this->enemy.setScale(0.f, 0.f);
+    this->asteroid.setTexture(Enemy::texture);
+	this->asteroid.setPosition(sf::Vector2f(posX, posY));
+    this->asteroid.setScale(sf::Vector2f(0.5f, 0.5f));
 }
 
 void Enemy::Move(){
-    this->enemy.move(-10,0);
+    this->asteroid.move(sf::Vector2f(-10,0));
 }
 
 bool Enemy::isOffScreen() const {
-    return this->enemy.getPosition().x + this->enemy.getGlobalBounds().width< 0;
+    return this->asteroid.getPosition().x + this->asteroid.getGlobalBounds().position.x < 0;
 }
 
 void Enemy::Blitz(sf::RenderWindow &window){
-    window.draw(this->enemy);
+    window.draw(this->asteroid);
 }
 
 sf::FloatRect Enemy::getEnemyBounds() const{
     // sf::FloatRect b_enemy = this->enemy.getGlobalBounds();
 
-    return this->enemy.getGlobalBounds();;
+    return this->asteroid.getGlobalBounds();
 }
 
 

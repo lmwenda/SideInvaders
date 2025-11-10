@@ -43,3 +43,5 @@
 # build folder
 build/
 output/
+.vscode/
+-p/
